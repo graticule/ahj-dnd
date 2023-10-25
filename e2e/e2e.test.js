@@ -3,7 +3,7 @@ import { fork } from "child_process";
 
 jest.setTimeout(30000); // default puppeteer timeout
 
-describe("Credit Card Validator form", () => {
+describe("Trello-like App Test", () => {
   let browser = null;
   let page = null;
   let server = null;
@@ -26,6 +26,8 @@ describe("Credit Card Validator form", () => {
       // devtools: true, // show devTools
     });
     page = await browser.newPage();
+
+    await page.goto(baseUrl);
   });
 
   afterAll(async () => {
@@ -33,7 +35,10 @@ describe("Credit Card Validator form", () => {
     server.kill();
   });
 
-  test("should add do something", async () => {
-    await page.goto(baseUrl);
+  test("is there what we need", async () => {
+    const container = await page.evaluate(() => {
+      return document.querySelector(".container");
+    });
+    expect(container).toBeTruthy();
   });
 });
