@@ -1,0 +1,39 @@
+.note {
+  position: relative;
+  background-color: #ffffff;
+  padding: 10px;
+  margin-left: 13px;
+  margin-right: 13px;
+  border-radius: 4px;
+}
+
+.note__text {
+
+}
+
+.note__close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  transform: scaleX(0) scaleY(0);
+  cursor: pointer;
+}
+
+.note:hover .note__close {
+  transform: scaleX(1) scaleY(1);
+}
+
+.note:nth-child(n+2) {
+  margin-top: 8px;
+}
+
+.note__grabbed {
+  position: absolute;
+  transform: rotate(3deg);
+  cursor: grabbing;
+  z-index: 999;
+  pointer-events: none;
+}

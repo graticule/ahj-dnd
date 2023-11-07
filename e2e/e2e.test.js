@@ -21,6 +21,7 @@ describe("Trello-like App Test", () => {
     });
 
     browser = await puppetteer.launch({
+      headless: "new",
       // headless: false, // show gui
       // slowMo: 250,
       // devtools: true, // show devTools
