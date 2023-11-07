@@ -101,13 +101,19 @@ export default class Board {
         if (e.target.closest(".column__header")) {
           console.log("We are here");
           this.placeholder.remove();
-          e.target.closest(".column").querySelector(".notes").insertAdjacentElement("afterbegin", this.placeholder);
+          e.target
+            .closest(".column")
+            .querySelector(".notes")
+            .insertAdjacentElement("afterbegin", this.placeholder);
           return;
         }
         if (e.target.closest(".column__footer")) {
           console.log("We are here");
           this.placeholder.remove();
-          e.target.closest(".column").querySelector(".notes").insertAdjacentElement("beforeend", this.placeholder);
+          e.target
+            .closest(".column")
+            .querySelector(".notes")
+            .insertAdjacentElement("beforeend", this.placeholder);
           return;
         }
       }
