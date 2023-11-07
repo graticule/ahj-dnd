@@ -96,6 +96,19 @@ export default class Board {
           } else {
             target.after(this.placeholder);
           }
+          return;
+        }
+        if (e.target.closest(".column__header")) {
+          console.log("We are here");
+          this.placeholder.remove();
+          e.target.closest(".column").querySelector(".notes").insertAdjacentElement("afterbegin", this.placeholder);
+          return;
+        }
+        if (e.target.closest(".column__footer")) {
+          console.log("We are here");
+          this.placeholder.remove();
+          e.target.closest(".column").querySelector(".notes").insertAdjacentElement("beforeend", this.placeholder);
+          return;
         }
       }
     });
@@ -113,8 +126,7 @@ export default class Board {
         this.current.classList.remove("note__grabbed");
         this.current.style.top = null;
         this.current.style.left = null;
-        this.placeholder.after(this.current);
-        this.placeholder.remove();
+        this.placeholder.replaceWith(this.current);
         this.current = undefined;
       }
     });
