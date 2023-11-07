@@ -7,7 +7,7 @@ export default class Note {
     this.bindToDOM();
   }
 
-  static createForContent({text}) {
+  static createForContent({ text }) {
     const result = document.createElement("div");
     result.classList.add("note");
     this.text = document.createElement("div");
@@ -15,7 +15,7 @@ export default class Note {
     this.text.innerText = text;
     result.appendChild(this.text);
     this.closeButton = document.createElement("div");
-    this.closeButton.classList.add("note__close");
+    this.closeButton.classList.add("note__close-button");
     result.appendChild(this.closeButton);
     return result;
   }

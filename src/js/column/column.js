@@ -13,16 +13,19 @@ export default class Column {
     result.classList.add("column");
     result.innerHTML = `<div class="column__header">
       <h4>${title}</h4>
-      <div class="column__menu"></div>
     </div>
     <div class="notes"></div>
     <div class="column__footer">
       <div class="column__add-button">
       Add another card
       </div>
-      <div class="column__add-form hidden">
+      <div class="column__add-form add-form hidden">
       <form>
-        
+        <textarea class="add-form__text" placeholder="Enter your note..."></textarea>
+        <div class="add-form__footer">
+        <button class="add-form__add-button">Add Note</button>
+        <div class="add-form__close-button"></div>  
+        </div>
       </form>
       </div>
     </div>`;

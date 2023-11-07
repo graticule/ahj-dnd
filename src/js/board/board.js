@@ -1,23 +1,121 @@
 import "./board.css";
 import Column from "../column/column";
+import Note from "../note/note";
 
 export default class Board {
   constructor(container, content) {
     this.container = container;
     this.element = Board.createForContent(content);
+    this.current = undefined;
     this.bindToDOM();
     this.init();
   }
 
   init() {
+    this.placeholder = document.createElement("div");
+    this.placeholder.classList.add("note", "note-placeholder");
+
     this.element.addEventListener("click", (e) => {
-      if (e.target.closest(".note__close")) {
+      e.preventDefault();
+      if (e.target.closest(".note__close-button")) {
         e.target.closest(".note").remove();
         return false;
       }
       if (e.target.closest(".column__add-button")) {
         e.target.closest(".column__add-button").classList.add("hidden");
-        e.target.closest(".column__footer").querySelector(".column__add-form").classList.remove("hidden");
+        e.target
+          .closest(".column__footer")
+          .querySelector(".column__add-form")
+          .classList.remove("hidden");
+        return false;
+      }
+      if (e.target.closest(".add-form__close-button")) {
+        e.target
+          .closest(".column__footer")
+          .querySelector(".column__add-button")
+          .classList.remove("hidden");
+        e.target.closest(".column__add-form").classList.add("hidden");
+        return false;
+      }
+      if (e.target.closest(".add-form__add-button")) {
+        const formText = e.target
+          .closest(".column__add-form")
+          .querySelector(".add-form__text");
+        const container = e.target.closest(".column").querySelector(".notes");
+        if (formText.value !== "") {
+          new Note(container, { text: formText.value });
+        } else {
+          return;
+        }
+        formText.value = "";
+        e.target
+          .closest(".column__footer")
+          .querySelector(".column__add-button")
+          .classList.remove("hidden");
+        e.target.closest(".column__add-form").classList.add("hidden");
+        return false;
+      }
+    });
+
+    this.element.addEventListener("mousedown", (e) => {
+      if (e.target.closest(".note__close-button")) return;
+      if (e.target.closest(".note")) {
+        document.body.style.cursor = "grabbing";
+        this.startX = e.clientX;
+        this.startY = e.clientY;
+        this.current = e.target.closest(".note");
+        this.current.after(this.placeholder);
+        const { height, width } = this.current.getBoundingClientRect();
+        this.current.style.width = width + "px";
+        this.current.style.height = height + "px";
+        this.placeholder.style.width = width + "px";
+        this.placeholder.style.height = height + "px";
+        this.current.classList.add("note__grabbed");
+        const { top, left } = this.current.getBoundingClientRect();
+        this.currentTop = top;
+        this.currentLeft = left;
+        return false;
+      }
+    });
+
+    this.element.addEventListener("mousemove", (e) => {
+      if (this.current) {
+        e.preventDefault();
+        this.current.style.top =
+          this.currentTop + e.clientY - this.startY + "px";
+        this.current.style.left =
+          this.currentLeft + e.clientX - this.startX + "px";
+        if (
+          e.target.closest(".note") &&
+          !e.target.closest(".note-placeholder")
+        ) {
+          const target = e.target.closest(".note");
+          const { top, height } = target.getBoundingClientRect();
+          if (e.clientY < top + height / 2) {
+            target.before(this.placeholder);
+          } else {
+            target.after(this.placeholder);
+          }
+        }
+      }
+    });
+
+    this.element.addEventListener("mouseover", (e) => {
+      if (this.current) {
+        e.preventDefault();
+      }
+    });
+
+    this.element.addEventListener("mouseup", () => {
+      if (this.current) {
+        document.body.style.cursor = null;
+        document.body.style.pointerEvents = null;
+        this.current.classList.remove("note__grabbed");
+        this.current.style.top = null;
+        this.current.style.left = null;
+        this.placeholder.after(this.current);
+        this.placeholder.remove();
+        this.current = undefined;
       }
     });
   }
@@ -28,33 +126,15 @@ export default class Board {
         columns: [
           {
             title: "TODO",
-            notes: [
-              {
-                text: "Запись 1",
-              },
-              {
-                text: "Запись 2",
-              }
-            ],
+            notes: [],
           },
           {
             title: "IN PROGRESS",
-            notes: [
-              {
-                text: "Запись 3",
-              },
-              {
-                text: "Запись 4",
-              }
-            ],
+            notes: [],
           },
           {
             title: "DONE",
-            notes: [
-              {
-                text: "Запись 5",
-              },
-            ],
+            notes: [],
           },
         ],
       };
